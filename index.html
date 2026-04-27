@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI-based Life Insight Generator — Realistic life pattern analysis based on your name and date of birth." />
+  <title>Life Insight Generator | AI Life Pattern Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="logo">
+      <span class="logo-icon">✦</span>
+      <span class="logo-text">LifeInsight <span class="logo-accent">AI</span></span>
+    </div>
+    <p class="header-tagline">Probabilistic · Grounded · Realistic</p>
+  </header>
+
+  <main class="main-container">
+
+    <!-- ── INPUT PAGE ── -->
+    <section id="input-page">
+      <div class="hero-section">
+        <div class="hero-badge">🧠 AI Life Pattern Analysis</div>
+        <h1 class="hero-title">Discover Your <span class="gradient-text">Life Overview</span></h1>
+        <p class="hero-subtitle">Enter your name and date of birth to receive a structured, realistic life pattern analysis powered by Google Gemini AI.</p>
+      </div>
+
+      <div class="glass-card input-card">
+        <h2 class="input-card-title">Your Information</h2>
+        <p class="input-card-sub">All processing is done securely. Your data is never stored.</p>
+
+        <form id="life-form" novalidate>
+          <div class="form-group">
+            <label for="user-name" class="form-label">Full Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="user-name" class="form-input" placeholder="e.g. Alex Johnson" autocomplete="off" required />
+            </div>
+            <span class="error-msg" id="name-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="user-dob" class="form-label">Date of Birth</label>
+            <div class="input-wrapper">
+              <span class="input-icon">📅</span>
+              <input type="date" id="user-dob" class="form-input" required />
+            </div>
+            <span class="error-msg" id="dob-error"></span>
+          </div>
+
+          <button type="submit" class="btn-generate" id="generate-btn">
+            <span>Generate My Life Overview</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ── LOADING PAGE ── -->
+    <section id="loading-page" class="hidden">
+      <div class="glass-card loader-card">
+        <div class="loader-spinner"></div>
+        <p class="loader-text">Analyzing life patterns…</p>
+        <div class="loader-steps">
+          <span class="step" id="step-1">Calculating age &amp; life stage</span>
+          <span class="step" id="step-2">Mapping personality tendencies</span>
+          <span class="step" id="step-3">Building career timeline</span>
+          <span class="step" id="step-4">Generating insights with Gemini AI</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RESULTS PAGE ── -->
+    <section id="results-page" class="hidden">
+
+      <!-- Profile Strip -->
+      <div class="profile-strip glass-card">
+        <div class="profile-avatar" id="result-avatar"></div>
+        <div class="profile-info">
+          <h2 class="profile-name" id="result-name"></h2>
+          <div class="profile-chips" id="profile-chips"></div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-sm btn-download" id="download-btn">⬇ Save</button>
+          <button class="btn-sm btn-reset" id="reset-btn">↺ New</button>
+        </div>
+      </div>
+
+      <!-- All Sections in one page -->
+      <div class="results-grid" id="results-grid">
+
+        <!-- 1. Core Nature -->
+        <div class="result-card" id="card-core">
+          <div class="card-header"><span class="card-icon">🧠</span><span class="card-title">Core Nature</span></div>
+          <ul class="bullet-list" id="core-list"></ul>
+        </div>
+
+        <!-- 2. Family Life -->
+        <div class="result-card" id="card-family">
+          <div class="card-header"><span class="card-icon">🏠</span><span class="card-title">Family Life</span></div>
+          <div class="mini-timeline" id="family-timeline"></div>
+        </div>
+
+        <!-- 3. Love & Relationships -->
+        <div class="result-card" id="card-love">
+          <div class="card-header"><span class="card-icon">💞</span><span class="card-title">Love &amp; Relationships</span></div>
+          <div id="love-content"></div>
+        </div>
+
+        <!-- 4. Communication -->
+        <div class="result-card" id="card-comm">
+          <div class="card-header"><span class="card-icon">💬</span><span class="card-title">Communication Style</span></div>
+          <ul class="bullet-list" id="comm-list"></ul>
+        </div>
+
+        <!-- 5. Career Timeline -->
+        <div class="result-card wide" id="card-career-tl">
+          <div class="card-header"><span class="card-icon">📈</span><span class="card-title">Career Timeline</span></div>
+          <div class="career-row" id="career-timeline-row"></div>
+        </div>
+
+        <!-- 6. Career Nature -->
+        <div class="result-card" id="card-career-nature">
+          <div class="card-header"><span class="card-icon">⚙️</span><span class="card-title">Career Nature</span></div>
+          <ul class="bullet-list" id="career-nature-list"></ul>
+        </div>
+
+        <!-- 7. Summary -->
+        <div class="result-card wide summary-card" id="card-summary">
+          <div class="card-header"><span class="card-icon">✨</span><span class="card-title">Final Summary</span></div>
+          <p class="summary-text" id="summary-text"></p>
+          <div class="final-quote">"Growth is gradual and influenced by choices, not fixed outcomes."</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>LifeInsight AI · Insights are probabilistic, not deterministic · <span id="current-year"></span></p>
+  </footer>
+
+  <script src="js/analyzer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
